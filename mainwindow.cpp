@@ -28,7 +28,7 @@ MainWindow::MainWindow(QWidget *parent) :
     mainLayout->addWidget(plainTextEditOutput);
 
     setWindowTitle(tr("QHash"));
-    setMinimumSize(350,350);
+    setMinimumSize(666,350);
 }
 
 MainWindow::~MainWindow()
@@ -61,5 +61,6 @@ void MainWindow::getFileHash(const QMimeData *mimeData)
 
 void MainWindow::handleResults(const QString &result)
 {
+    qDebug() << result;
     plainTextEditOutput->appendPlainText(result);
 }

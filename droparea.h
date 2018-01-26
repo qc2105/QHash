@@ -76,6 +76,7 @@ protected:
 
 private:
     QPlainTextEdit *plainTextEditInput;
+    int id;
 };
 
 #endif // DROPAREA_H

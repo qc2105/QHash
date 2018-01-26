@@ -52,6 +52,7 @@
 
 #include <QDragEnterEvent>
 #include <QMimeData>
+#include <QDebug>
 
 DropArea::DropArea(QWidget *parent)
     : QPlainTextEdit(parent)
@@ -61,6 +62,7 @@ DropArea::DropArea(QWidget *parent)
     setAcceptDrops(true);
     setAutoFillBackground(true);
     clear();
+    id = 0;
 }
 
 void DropArea::dragEnterEvent(QDragEnterEvent *event)
@@ -82,8 +84,11 @@ void DropArea::dropEvent(QDropEvent *event)
     if (mimeData->hasUrls()) {
         QList<QUrl> urlList = mimeData->urls();
         QString text;
-        for (int i = 0; i < urlList.size() && i < 32; ++i)
+        for (int i = 0; i < urlList.size() && i < 32; ++i) {
+            text += QString::number(id) + QString(": ");
             text += urlList.at(i).toLocalFile() + QLatin1Char('\n');
+            id++;
+        }
         appendPlainText(text);
     } else {
         setPlainText(tr("Cannot display data"));

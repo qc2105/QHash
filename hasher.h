@@ -8,7 +8,7 @@ class Hasher : public QObject
 {
     Q_OBJECT
 public:
-    explicit Hasher(QObject *parent = nullptr);
+    explicit Hasher(QObject *parent = NULL);
 
 signals:
     void resultReady(const QString &result);
@@ -19,6 +19,7 @@ public slots:
 
 private:
      QString result;
+     int id;
 };
 
 #endif // HASHER_H

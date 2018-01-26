@@ -7,7 +7,7 @@
 
 Hasher::Hasher(QObject *parent) : QObject(parent)
 {
-
+    id = 0;
 }
 
 void Hasher::doWork(QString fileUrl, QCryptographicHash::Algorithm hashAlgorithm)
@@ -27,8 +27,11 @@ void Hasher::doWork(QString fileUrl, QCryptographicHash::Algorithm hashAlgorithm
             readSize = qMin<qint64>(fileSize, bufferSize);
         }
         in.close();
-        result = hash.result().toHex();        qDebug() << result;
+        result = QString::number(id) + QString(": ");
+        result += hash.result().toHex();
+        result += QLatin1Char('\n');     qDebug() << result;
         emit resultReady(result);
+        id++;
     } else {    qDebug() << "Failed to open device!";
     }
 }
