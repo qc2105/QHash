@@ -106,7 +106,7 @@ void DropArea::dragLeaveEvent(QDragLeaveEvent *event)
 
 void DropArea::clear()
 {
-    setPlainText(tr("<drop content>"));
+    setPlainText(tr("请将文件拖拽到此区域"));
     setBackgroundRole(QPalette::Dark);
 
     emit changed();

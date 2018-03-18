@@ -22,13 +22,36 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(worker, &Hasher::resultReady, this, &MainWindow::handleResults);
     workerThread.start();
 
+    menu[0] = new QMenu("算法");
+    act[0] = new QAction("SHA256", this);
+    act[0]->setCheckable(true);
+    menu[0]->addAction(act[0]);
+    act[1] = new QAction("SHA512", this);
+    act[1]->setCheckable(true);
+    menu[0]->addAction(act[1]);
+    act[2] = new QAction("MD5", this);
+    act[2]->setCheckable(true);
+    menu[0]->addAction(act[2]);
+
+
+    menuBar = new QMenuBar(this);
+    menuBar->addMenu(menu[0]);
+    menuBar->setGeometry(0,0, this->width(),30);
+
+    hashAlgorithm = QCryptographicHash::Sha256;
+
+    connect(menuBar, SIGNAL(triggered(QAction*)), this, SLOT(trigerMenu(QAction*)));
+
+
+
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
+    mainLayout->addWidget(menuBar);
     mainLayout->addWidget(dropArea);
     plainTextEditOutput = new QPlainTextEdit(this);
     mainLayout->addWidget(plainTextEditOutput);
 
-    setWindowTitle(tr("QHash"));
-    setMinimumSize(666,350);
+    setWindowTitle(tr("Hasher"));
+    setMinimumSize(500,350);
 }
 
 MainWindow::~MainWindow()
@@ -52,7 +75,7 @@ void MainWindow::getFileHash(const QMimeData *mimeData)
             }
             for (int i = 0; i < urlList.size() && i < 32; ++i) {
                 QString fileUrl = urlList.at(i).toLocalFile();
-                emit operate(fileUrl, QCryptographicHash::Sha256);
+                emit operate(fileUrl, hashAlgorithm);
             }
         } else {
         }
@@ -63,4 +86,24 @@ void MainWindow::handleResults(const QString &result)
 {
     qDebug() << result;
     plainTextEditOutput->appendPlainText(result);
+}
+
+// TODO: 当选择一个action时，uncheck其他的action
+void MainWindow::trigerMenu(QAction *act)
+{
+    if(act->text() == "SHA256")
+    {
+        qDebug() << "选择sha256校验算法";
+        hashAlgorithm = QCryptographicHash::Sha256;
+    }
+    else if (act->text() == "SHA512")
+    {
+        qDebug() << "选择sha512校验算法";
+        hashAlgorithm = QCryptographicHash::Sha512;
+    }
+    else if (act->text() == "MD5")
+    {
+        qDebug() << "选择md5校验算法";
+        hashAlgorithm = QCryptographicHash::Md5;
+    }
 }
