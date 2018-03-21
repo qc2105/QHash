@@ -62,7 +62,6 @@ DropArea::DropArea(QWidget *parent)
     setAcceptDrops(true);
     setAutoFillBackground(true);
     clear();
-    id = 0;
 }
 
 void DropArea::dragEnterEvent(QDragEnterEvent *event)
@@ -85,9 +84,8 @@ void DropArea::dropEvent(QDropEvent *event)
         QList<QUrl> urlList = mimeData->urls();
         QString text;
         for (int i = 0; i < urlList.size() && i < 32; ++i) {
-            text += QString::number(id) + QString(": ");
+            text += QString::number(i) + QString(": ");
             text += urlList.at(i).toLocalFile() + QLatin1Char('\n');
-            id++;
         }
         appendPlainText(text);
     } else {

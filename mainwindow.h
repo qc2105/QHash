@@ -32,7 +32,7 @@ public:
     QMenuBar* menuBar;
 
 signals:
-    void operate(const QString &fileUrl, const QCryptographicHash::Algorithm hashAlgorithm);
+    void operate(int fileID, const QString &fileUrl, const QCryptographicHash::Algorithm hashAlgorithm);
 
 public slots:
     void getFileHash(const QMimeData *mimeData);
@@ -43,7 +43,8 @@ public slots:
 private:
     DropArea *dropArea;
     Hasher *hasher;
-    QCryptographicHash::Algorithm hashAlgorithm;
+    QCryptographicHash::Algorithm defaultHashAlgorithm;
+    QList<QCryptographicHash::Algorithm> hashAlgorithmList;
     QPlainTextEdit *plainTextEditOutput;
 };
 

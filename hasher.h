@@ -14,12 +14,11 @@ signals:
     void resultReady(const QString &result);
 
 public slots:
-     void doWork(QString fileUrl, QCryptographicHash::Algorithm hashAlgorithm);
+     void doWork(int fileID, QString fileUrl, QCryptographicHash::Algorithm hashAlgorithm);
      QString getResult();
 
 private:
      QString result;
-     int id;
 };
 
 #endif // HASHER_H
