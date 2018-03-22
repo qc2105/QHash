@@ -26,7 +26,15 @@ void Hasher::doWork(int fileID, QString fileUrl, QCryptographicHash::Algorithm h
             readSize = qMin<qint64>(fileSize, bufferSize);
         }
         in.close();
-        result = QString::number(fileID) + QString(": ");
+        QString algorithmString;
+        if (hashAlgorithm == QCryptographicHash::Sha256) {
+            algorithmString = QString("Sha256");
+        } else if (hashAlgorithm == QCryptographicHash::Sha512) {
+            algorithmString = QString("Sha512");
+        } else if (hashAlgorithm == QCryptographicHash::Md5) {
+            algorithmString = QString("Md5");
+        }
+        result = QString::number(fileID) + QString(":") + QString("[") + fileUrl + QString("]") + QString("-") + QString("[") + algorithmString + QString("]") + QString(": ");
         result += hash.result().toHex();
         result += QLatin1Char('\n');     qDebug() << result;
         emit resultReady(result);

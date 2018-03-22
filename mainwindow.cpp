@@ -50,7 +50,7 @@ MainWindow::MainWindow(QWidget *parent) :
     plainTextEditOutput = new QPlainTextEdit(this);
     mainLayout->addWidget(plainTextEditOutput);
 
-    setWindowTitle(tr("Hasher"));
+    setWindowTitle(tr("文件完整性校验器"));
     setMinimumSize(500,350);
 }
 
@@ -95,7 +95,7 @@ void MainWindow::handleResults(const QString &result)
     plainTextEditOutput->appendPlainText(result);
 }
 
-// TODO: 当选择一个action时，uncheck其他的action
+
 void MainWindow::trigerMenu(QAction *act)
 {
     if(act->text() == "SHA256")
