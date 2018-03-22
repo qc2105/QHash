@@ -33,9 +33,15 @@ MainWindow::MainWindow(QWidget *parent) :
     act[2]->setCheckable(true);
     menu[0]->addAction(act[2]);
 
+    menu[1] = new QMenu("清屏");
+    act[3] = new QAction("上部", this);
+    menu[1]->addAction(act[3]);
+    act[4] = new QAction("下部", this);
+    menu[1]->addAction(act[4]);
 
     menuBar = new QMenuBar(this);
     menuBar->addMenu(menu[0]);
+    menuBar->addMenu(menu[1]);
     menuBar->setGeometry(0,0, this->width(),30);
 
     defaultHashAlgorithm = QCryptographicHash::Sha256;
@@ -101,31 +107,33 @@ void MainWindow::trigerMenu(QAction *act)
     if(act->text() == "SHA256")
     {
         if (act->isChecked()) {
-            qDebug() << "选择sha256校验算法";
             hashAlgorithmList.append(QCryptographicHash::Sha256);
         } else {
-            qDebug() << "去掉sha256校验算法";
             hashAlgorithmList.removeAll(QCryptographicHash::Sha256);
         }
     }
     else if (act->text() == "SHA512")
     {
         if (act->isChecked()) {
-            qDebug() << "选择sha512校验算法";
             hashAlgorithmList.append(QCryptographicHash::Sha512);
         } else {
-            qDebug() << "去掉sha512校验算法";
             hashAlgorithmList.removeAll(QCryptographicHash::Sha512);
         }
     }
     else if (act->text() == "MD5")
     {
         if (act->isChecked()) {
-            qDebug() << "选择md5校验算法";
             hashAlgorithmList.append(QCryptographicHash::Md5);
         } else {
-            qDebug() << "去掉md5校验算法";
             hashAlgorithmList.removeAll(QCryptographicHash::Md5);
         }
+    }
+    else if (act->text() == "上部")
+    {
+        dropArea->clear();
+    }
+    else if (act->text() == "下部")
+    {
+        plainTextEditOutput->clear();
     }
 }

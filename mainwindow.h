@@ -7,7 +7,6 @@
 #include <QThread>
 #include <QMenu>
 #include <QMenuBar>
-#include <QMainWindow>
 
 
 class DropArea;
@@ -38,7 +37,6 @@ public slots:
     void getFileHash(const QMimeData *mimeData);
     void handleResults(const QString &);
     void trigerMenu(QAction* act);
-
 
 private:
     DropArea *dropArea;
