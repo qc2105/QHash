@@ -9,9 +9,9 @@ Hasher::Hasher(QObject *parent) : QObject(parent)
 {
 }
 
-void Hasher::doWork(int fileID, QString fileUrl, QCryptographicHash::Algorithm hashAlgorithm)
+void Hasher::doWork(QString fileUrl, QCryptographicHash::Algorithm hashAlgorithm)
 {
-    QFile in(fileUrl);    qDebug() << fileUrl;
+    QFile in(fileUrl);    qDebug() << "fileUrl: " << fileUrl;
     QFileInfo fileInfo(fileUrl);
     qint64 fileSize = fileInfo.size();    qDebug() << "filesize: " << fileSize;
     const int bufferSize = 10000;
@@ -34,7 +34,7 @@ void Hasher::doWork(int fileID, QString fileUrl, QCryptographicHash::Algorithm h
         } else if (hashAlgorithm == QCryptographicHash::Md5) {
             algorithmString = QString("Md5");
         }
-        result = QString::number(fileID) + QString(":") + QString("[") + fileUrl + QString("]") + QString("-") + QString("[") + algorithmString + QString("]") + QString(": ");
+        result = QString("[") + fileUrl + QString("]") + QString("-") + QString("[") + algorithmString + QString("]") + QString(": ");
         result += hash.result().toHex();
         result += QLatin1Char('\n');     qDebug() << result;
         emit resultReady(result);

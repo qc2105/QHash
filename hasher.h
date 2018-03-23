@@ -14,7 +14,7 @@ signals:
     void resultReady(const QString &result);
 
 public slots:
-     void doWork(int fileID, QString fileUrl, QCryptographicHash::Algorithm hashAlgorithm);
+     void doWork(QString fileUrl, QCryptographicHash::Algorithm hashAlgorithm);
      QString getResult();
 
 private:

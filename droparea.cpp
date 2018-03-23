@@ -83,7 +83,7 @@ void DropArea::dropEvent(QDropEvent *event)
     if (mimeData->hasUrls()) {
         QList<QUrl> urlList = mimeData->urls();
         QString text;
-        for (int i = 0; i < urlList.size() && i < 32; ++i) {
+        for (int i = 0; i < urlList.size() && i < MAXNFILES; ++i) {
             text += QString::number(i) + QString(": ");
             text += urlList.at(i).toLocalFile() + QLatin1Char('\n');
         }

@@ -7,6 +7,7 @@
 #include <QThread>
 #include <QMenu>
 #include <QMenuBar>
+#include "common.h"
 
 
 class DropArea;
@@ -31,12 +32,13 @@ public:
     QMenuBar* menuBar;
 
 signals:
-    void operate(int fileID, const QString &fileUrl, const QCryptographicHash::Algorithm hashAlgorithm);
+    void operate(const QString &fileUrl, const QCryptographicHash::Algorithm hashAlgorithm);
 
 public slots:
-    void getFileHash(const QMimeData *mimeData);
+    void getUrls(const QMimeData *mimeData);
     void handleResults(const QString &);
     void trigerMenu(QAction* act);
+    void calculateFileHash(QString fileUrl);
 
 private:
     DropArea *dropArea;

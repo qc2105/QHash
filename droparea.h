@@ -51,6 +51,7 @@
 #ifndef DROPAREA_H
 #define DROPAREA_H
 
+#include "common.h"
 #include <QPlainTextEdit>
 
 class QMimeData;

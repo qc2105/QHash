@@ -32,6 +32,7 @@ SOURCES += \
 HEADERS += \
     mainwindow.h \
     droparea.h \
-    hasher.h
+    hasher.h \
+    common.h
 
 FORMS +=

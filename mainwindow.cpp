@@ -6,6 +6,10 @@
 #include <QMetaType>
 #include <QPlainTextEdit>
 #include <QVBoxLayout>
+#include <QFileInfo>
+#include <QDir>
+
+
 
 MainWindow::MainWindow(QWidget *parent) :
     QWidget(parent)
@@ -13,7 +17,7 @@ MainWindow::MainWindow(QWidget *parent) :
     qRegisterMetaType<QCryptographicHash::Algorithm>("QCryptographicHash::Algorithm");
     dropArea = new DropArea;
     connect(dropArea, &DropArea::changed,
-            this, &MainWindow::getFileHash);
+            this, &MainWindow::getUrls);
 
     Hasher *worker = new Hasher;
     worker->moveToThread(&workerThread);
@@ -38,6 +42,8 @@ MainWindow::MainWindow(QWidget *parent) :
     menu[1]->addAction(act[3]);
     act[4] = new QAction("下部", this);
     menu[1]->addAction(act[4]);
+    act[5] = new QAction("全部", this);
+    menu[1]->addAction(act[5]);
 
     menuBar = new QMenuBar(this);
     menuBar->addMenu(menu[0]);
@@ -66,7 +72,37 @@ MainWindow::~MainWindow()
     workerThread.wait();
 }
 
-void MainWindow::getFileHash(const QMimeData *mimeData)
+void MainWindow::calculateFileHash(QString fileUrl)
+{
+    // if fileUrl represents a normal file
+    QFileInfo fileInfo(fileUrl);
+    if (fileInfo.isFile())
+    {
+        if (hashAlgorithmList.size() <= 0) {
+            emit operate(fileUrl, defaultHashAlgorithm);
+        } else {
+            QCryptographicHash::Algorithm hashAlgorithm;
+            foreach (hashAlgorithm, hashAlgorithmList) {
+                emit operate(fileUrl, hashAlgorithm);
+            }
+        }
+    }
+    else if (fileInfo.isDir())
+    // if fileUrl represents a directory
+    {
+        qDebug() << fileUrl << ": is a directory.";
+        QDir dir(fileUrl);
+        foreach(QFileInfo tempFileInfo, dir.entryInfoList())
+        {
+            if(tempFileInfo.baseName() != "") { // if it is not dot and not dotdot
+                qDebug() << tempFileInfo.filePath();
+                calculateFileHash(tempFileInfo.absoluteFilePath());
+            }
+        }
+    }
+}
+
+void MainWindow::getUrls(const QMimeData *mimeData)
 {
     if (!mimeData) {
         qDebug() << "mimeData is empty?";
@@ -76,19 +112,12 @@ void MainWindow::getFileHash(const QMimeData *mimeData)
     foreach (QString format, mimeData->formats()) {
         if (format == QLatin1String("text/uri-list")) {
             QList<QUrl> urlList = mimeData->urls();
-            for (int i = 0; i < urlList.size() && i < 32; ++i) {
+            for (int i = 0; i < urlList.size() && i < MAXNFILES; ++i) {
                 text.append(urlList.at(i).toString() + QLatin1Char(' '));
             }
-            for (int i = 0; i < urlList.size() && i < 32; ++i) {
+            for (int i = 0; i < urlList.size() && i < MAXNFILES; ++i) {
                 QString fileUrl = urlList.at(i).toLocalFile();
-                if (hashAlgorithmList.size() <= 0) {
-                    emit operate(i, fileUrl, defaultHashAlgorithm);
-                } else {
-                    QCryptographicHash::Algorithm hashAlgorithm;
-                    foreach (hashAlgorithm, hashAlgorithmList) {
-                        emit operate(i, fileUrl, hashAlgorithm);
-                    }
-                }
+                calculateFileHash(fileUrl);
             }
         } else {
         }
@@ -134,6 +163,11 @@ void MainWindow::trigerMenu(QAction *act)
     }
     else if (act->text() == "下部")
     {
+        plainTextEditOutput->clear();
+    }
+    else if (act->text() == "全部")
+    {
+        dropArea->clear();
         plainTextEditOutput->clear();
     }
 }
