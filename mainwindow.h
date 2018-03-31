@@ -37,7 +37,8 @@ signals:
 public slots:
     void getUrls(const QMimeData *mimeData);
     void handleResults(const QString &);
-    void trigerMenu(QAction* act);
+    void trigerMenu0(QAction* act);
+    void trigerMenu1(QAction* act);
     void calculateFileHash(QString fileUrl);
 
 private:

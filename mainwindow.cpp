@@ -52,9 +52,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     defaultHashAlgorithm = QCryptographicHash::Sha256;
 
-    connect(menuBar, SIGNAL(triggered(QAction*)), this, SLOT(trigerMenu(QAction*)));
-
-
+    connect(menu[0], SIGNAL(triggered(QAction*)), this, SLOT(trigerMenu0(QAction*)));
+    connect(menu[1], SIGNAL(triggered(QAction*)), this, SLOT(trigerMenu1(QAction*)));
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->addWidget(menuBar);
@@ -79,6 +78,7 @@ void MainWindow::calculateFileHash(QString fileUrl)
     if (fileInfo.isFile())
     {
         if (hashAlgorithmList.size() <= 0) {
+            qDebug() << "hashAlgorithmList is empty";
             emit operate(fileUrl, defaultHashAlgorithm);
         } else {
             QCryptographicHash::Algorithm hashAlgorithm;
@@ -131,8 +131,9 @@ void MainWindow::handleResults(const QString &result)
 }
 
 
-void MainWindow::trigerMenu(QAction *act)
+void MainWindow::trigerMenu0(QAction *act)
 {
+    qDebug() << "act->text(): " << act->text();
     if(act->text() == "SHA256")
     {
         if (act->isChecked()) {
@@ -157,7 +158,12 @@ void MainWindow::trigerMenu(QAction *act)
             hashAlgorithmList.removeAll(QCryptographicHash::Md5);
         }
     }
-    else if (act->text() == "上部")
+}
+
+void MainWindow::trigerMenu1(QAction *act)
+{
+    qDebug() << "act->text(): " << act->text();
+    if (act->text() == "上部")
     {
         dropArea->clear();
     }
