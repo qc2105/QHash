@@ -1,2 +1,4 @@
 QHash.pro.user
 build-test-QHash-unknown-Debug/
+out/**
+.vs/**
